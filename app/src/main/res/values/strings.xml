@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AsurionTask</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="within_working_hours">Thank you for getting in touch with us. We’ll get back to you as soon as possible</string>
+    <string name="working_hours_completed">Work hours has ended. Please contact us again on the next work day</string>
+    <string name="working_hours_time">"Office Hours : "</string>
+    <string name="call">CALL</string>
+    <string name="chat">CHAT</string>
+    <string name="office_hours_m_f_9_00_18_00">Office Hours : M-F 9:00 - 18:00</string>
+</resources>
