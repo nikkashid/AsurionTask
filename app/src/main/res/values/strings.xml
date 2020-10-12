@@ -7,4 +7,6 @@
     <string name="call">CALL</string>
     <string name="chat">CHAT</string>
     <string name="office_hours_m_f_9_00_18_00">Office Hours : M-F 9:00 - 18:00</string>
+    <string name="please_wait">Please Wait..</string>
+    <string name="network_check">Please check your network connectivity!!</string>
 </resources>

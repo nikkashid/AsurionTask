@@ -1,7 +1,7 @@
 package com.nikhil.asuriontask.ui.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -14,6 +14,7 @@ import com.nikhil.asuriontask.R
 import com.nikhil.asuriontask.databinding.FragmentHomeBinding
 import com.nikhil.asuriontask.entities.PetsEntity
 import com.nikhil.asuriontask.ui.adapters.PetsListAdapter
+import com.nikhil.asuriontask.utility.Utility
 import com.nikhil.asuriontask.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -32,6 +33,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), PetsListAdapter.IClickLis
 
     lateinit var navController: NavController
 
+    private lateinit var alertDialog: AlertDialog
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -39,16 +42,24 @@ class HomeFragment : Fragment(R.layout.fragment_home), PetsListAdapter.IClickLis
 
         navController = Navigation.findNavController(view)
 
-        lifecycleScope.launch {
-            val configInfo = homeViewModel.getConfigInfo("config")
-            Log.d(TAG, "onViewCreated: $configInfo")
-            setConfigData(configInfo)
-        }
+        alertDialog = Utility.getProgressDialog(requireContext(), getString(R.string.please_wait))
 
         lifecycleScope.launch {
-            val petsList = homeViewModel.getConfigInfo("pets")
-            Log.d(TAG, "onViewCreated: $petsList")
-            convertDataToList(petsList)
+
+            if (Utility.isNetworkAvailable(requireContext())) {
+                alertDialog.show()
+                val configInfo = homeViewModel.getConfigInfo("config")
+                setConfigData(configInfo)
+                val petsList = homeViewModel.getConfigInfo("pets")
+                convertDataToList(petsList)
+                alertDialog.dismiss()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.network_check),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         homeFragment.ibChat.setOnClickListener {
@@ -96,11 +107,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), PetsListAdapter.IClickLis
 
     private fun convertDataToList(petsList: String?) {
         if (petsList!!.isNotEmpty()) {
-            var petsListJsonArray: JSONArray = JSONArray(petsList)
-            var petEntityList: ArrayList<PetsEntity> = ArrayList()
+            val petsListJsonArray: JSONArray = JSONArray(petsList)
+            val petEntityList: ArrayList<PetsEntity> = ArrayList()
             for (i in 0 until petsListJsonArray.length()) {
                 val innerObject: JSONObject = petsListJsonArray.getJSONObject(i)
-                var petEntity = PetsEntity(
+                val petEntity = PetsEntity(
                     innerObject.getString("content_url"),
                     innerObject.getString("date_added"),
                     innerObject.getString("image_url"),
@@ -123,7 +134,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), PetsListAdapter.IClickLis
     }
 
     override fun onClickListener(petsEntity: PetsEntity) {
-        var action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(petsEntity)
+        val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(petsEntity)
         navController.navigate(action)
     }
 

@@ -8,6 +8,6 @@ class HomeViewModel @ViewModelInject constructor(private val petsRepository: Pet
     ViewModel() {
 
     suspend fun getConfigInfo(fileName: String): String? {
-        return petsRepository.readJsonFile(fileName)
+        return petsRepository.suspendFunction(fileName)
     }
 }

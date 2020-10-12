@@ -67,4 +67,7 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02"
     kapt "androidx.hilt:hilt-compiler:1.0.0-alpha02"
 
+    //Dialog with spot progress
+    implementation 'com.github.d-max:spots-dialog:1.1@aar'
+
 }
